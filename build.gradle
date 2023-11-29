@@ -45,3 +45,36 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
 }
+
+task copyAARDebug(type: Copy) {
+    // build/outputs/aar
+    from    ( [buildDir.absolutePath, 'outputs', 'aar'].join(File.separator) )
+
+    // mylibrary-debug.aar
+    include ( "${project.name}-debug.aar" )
+
+    // <root_project_dir>/libs/debug
+    into    ( [rootDir.absolutePath, 'libs', 'debug'].join(File.separator) )
+
+    // <root_project_dir>/libs/debug/wcsdk.aar
+    rename  ("${project.name}-debug.aar", 'wcsdk.aar')
+}
+
+task copyAARRelease(type: Copy) {
+    // build/outputs/aar
+    from    ( [buildDir.absolutePath, 'outputs', 'aar'].join(File.separator) )
+
+    // mylibrary-release.aar
+    include ( "${project.name}-release.aar" )
+
+    // <root_project_dir>/libs/release
+    into    ( [rootDir.absolutePath, 'libs', 'release'].join(File.separator) )
+
+    // <root_project_dir>/libs/renamed/wcsdk.aar
+    rename  ("${project.name}-release.aar", 'wcsdk.aar')
+}
+
+afterEvaluate {
+    assembleDebug.finalizedBy('copyAARDebug')
+    assembleRelease.finalizedBy('copyAARRelease')
+}
