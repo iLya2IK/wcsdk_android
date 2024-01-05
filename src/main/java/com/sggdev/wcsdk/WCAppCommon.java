@@ -315,6 +315,7 @@ public class WCAppCommon extends Application implements  androidx.work.Configura
     public static final String PREF_HTTP_CFG_SID  = "PREF_HTTP_CFG_SID";
     public static final String PREF_DB_CFG_LAST_REC = "PREF_DB_CFG_LAST_REC";
     public static final String PREF_DB_CFG_LAST_MSG = "PREF_DB_CFG_LAST_MSG";
+    public static final String STATUS_IS_CONFIG_WRONG = "STATUS_IS_CONFIG_WRONG";
 
     @SuppressLint("HardwareIds")
     protected String encrypt(String value ) {
@@ -380,6 +381,18 @@ public class WCAppCommon extends Application implements  androidx.work.Configura
         spEd.apply();
     }
 
+    private boolean getPrefBool(String pref, boolean def) {
+        SharedPreferences sp = getSharedPreferences(PREF_USER_PREFS, MODE_PRIVATE);
+        return sp.getBoolean(pref, def);
+    }
+
+    private void setPrefBool(String pref, boolean value) {
+        SharedPreferences sp = getSharedPreferences(PREF_USER_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor spEd = sp.edit();
+        spEd.putBoolean(pref, value);
+        spEd.apply();
+    }
+
     public String getHttpCfgServerUrl() {
         return getSecurePref(PREF_HTTP_CFG_URL);
     }
@@ -429,6 +442,9 @@ public class WCAppCommon extends Application implements  androidx.work.Configura
     public  void setHttpCfgSID(String value) {
         setPref(PREF_HTTP_CFG_SID, value);
     }
+
+    public boolean getStatusIsConfigWrong() {return getPrefBool(STATUS_IS_CONFIG_WRONG, false); }
+    public void setStatusIsConfigWrong(boolean v) { setPrefBool(STATUS_IS_CONFIG_WRONG, v); }
 
     private Boolean isNetworkAvailable(Application application) {
         ConnectivityManager connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);

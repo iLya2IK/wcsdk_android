@@ -75,19 +75,30 @@ public class WCHTTPBackgroundWork extends androidx.work.Worker {
                     httpClient.startConnectSynchro(null);
                 }
 
+                boolean launch_resync = true;
                 if (httpClient.state() == CS_CONNECTED) {
                     Log.d(TAG, "sending requests...");
                     myApp.doOnBackgroundSync(httpClient);
+                    myApp.setStatusIsConfigWrong(false);
+                } else {
+                    if (!myApp.getStatusIsConfigWrong()) {
+                        myApp.setStatusIsConfigWrong(true);
+                    } else
+                        launch_resync = false;
                 }
 
-                WCHTTPResync.Builder builder = new WCHTTPResync.Builder(myApp, aLstMsg)
-                        .addOnFinishListener(myApp.getOnSyncNotify())
-                        .setClientState(httpClient.state())
-                        .setErrorMsg(mErrStr.toString());
+                if (launch_resync) {
 
-                myApp.configBackroundResync(builder);
+                    WCHTTPResync.Builder builder = new WCHTTPResync.Builder(myApp, aLstMsg)
+                            .addOnFinishListener(myApp.getOnSyncNotify())
+                            .setClientState(httpClient.state())
+                            .setErrorMsg(mErrStr.toString());
 
-                builder.doResync();
+                    myApp.configBackroundResync(builder);
+
+                    builder.doResync();
+
+                }
 
             } finally {
                 httpClient.removeStateChangeListener(listnr);
