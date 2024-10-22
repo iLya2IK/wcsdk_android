@@ -369,27 +369,39 @@ public class WCAppCommon extends Application implements  androidx.work.Configura
         spEd.apply();
     }
 
-    private String getPref(String pref) {
+    public String getPref(String pref) {
         SharedPreferences sp = getSharedPreferences(PREF_USER_PREFS, MODE_PRIVATE);
         return sp.getString(pref, null);
     }
 
-    private void setPref(String pref, String value) {
+    public void setPref(String pref, String value) {
         SharedPreferences sp = getSharedPreferences(PREF_USER_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor spEd = sp.edit();
         spEd.putString(pref, value);
         spEd.apply();
     }
 
-    private boolean getPrefBool(String pref, boolean def) {
+    public boolean getPrefBool(String pref, boolean def) {
         SharedPreferences sp = getSharedPreferences(PREF_USER_PREFS, MODE_PRIVATE);
         return sp.getBoolean(pref, def);
     }
 
-    private void setPrefBool(String pref, boolean value) {
+    public void setPrefBool(String pref, boolean value) {
         SharedPreferences sp = getSharedPreferences(PREF_USER_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor spEd = sp.edit();
         spEd.putBoolean(pref, value);
+        spEd.apply();
+    }
+
+    public int getPrefInt(String pref, int def) {
+        SharedPreferences sp = getSharedPreferences(PREF_USER_PREFS, MODE_PRIVATE);
+        return sp.getInt(pref, def);
+    }
+
+    public void setPrefInt(String pref, int value) {
+        SharedPreferences sp = getSharedPreferences(PREF_USER_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor spEd = sp.edit();
+        spEd.putInt(pref, value);
         spEd.apply();
     }
 

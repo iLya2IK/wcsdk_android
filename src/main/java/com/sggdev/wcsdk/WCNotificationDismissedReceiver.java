@@ -11,7 +11,9 @@ public class WCNotificationDismissedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(WC_SKIP)) {
-            WCHTTPResync.restartWCHTTPBackgroundWork(context);
+            boolean need_to_restart = intent.getBooleanExtra(WCHTTPResync.EXTRA_NOTIFICATION_NEED_RESTART, true);
+            if (need_to_restart)
+                WCHTTPResync.restartWCHTTPBackgroundWork(context);
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             int notify_id = intent.getIntExtra(WCHTTPResync.EXTRA_NOTIFICATION_ID, WCHTTPResync.notificationId);
             notificationManager.cancel(notify_id);

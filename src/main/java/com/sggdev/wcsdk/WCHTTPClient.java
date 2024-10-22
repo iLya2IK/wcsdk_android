@@ -614,8 +614,12 @@ public class WCHTTPClient {
 
                         db.addMedia(mediaList);
                         String lst = db.addMsgs(cfg.getFullUserName(), list, ChatDatabase.MSG_STATE_RECIEVED, WCUtils.serverTimeStamp());
-                        if (lst != null && lst.length() > 0)
-                            cfg.setLastRecStamp(lst);
+                        if ((lst != null) && (lst.length() > 0)) {
+                            if (cfg.getLastRecStamp() == null) {
+                                cfg.setLastRecStamp(lst);
+                            } else if (lst.compareTo(cfg.getLastRecStamp()) > 0)
+                                cfg.setLastRecStamp(lst);
+                        }
                     }
                 } else {
                     doError(resultCode, resultMsg);
@@ -696,8 +700,12 @@ public class WCHTTPClient {
                         mLastAddedMsgsCnt = list.size();
 
                         String lst = db.addMsgs(cfg.getFullUserName(), list, ChatDatabase.MSG_STATE_RECIEVED, WCUtils.serverTimeStamp());
-                        if (lst != null && lst.length() > 0)
-                            cfg.setLastMsgStamp(lst);
+                        if ((lst != null) && (lst.length() > 0)) {
+                            if (cfg.getLastMsgStamp() == null) {
+                                cfg.setLastMsgStamp(lst);
+                            } else if (lst.compareTo(cfg.getLastMsgStamp()) > 0)
+                                cfg.setLastMsgStamp(lst);
+                        }
                     }
                 } else {
                     doError(resultCode, resultMsg);

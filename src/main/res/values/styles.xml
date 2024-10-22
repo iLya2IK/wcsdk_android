@@ -10,6 +10,16 @@
         <item name="android:clickable">true</item>
     </style>
 
+    <style name="period_switcher" parent="@style/Widget.AppCompat.ImageButton">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/period_switcher</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
     <style name="round_button" parent="@style/Widget.AppCompat.ImageButton">
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="android:textColor">@color/colorText</item>

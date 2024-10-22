@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.UUID;
 
 public class SampleGattAttributes {
@@ -19,6 +20,8 @@ public class SampleGattAttributes {
     static String BT_RADIO_NOTI_CHAR1 = "00009ef4";
     private final static String BT_RELAY_CFG_CHAR = "00009ef5";
     static String BT_RELAY_NOTI_CHAR1 = "00009ef6";
+    private final static String BT_WIFI_RELOAD_CFG_CHAR = "00009ef7";
+    static String BT_WIFI_RELOAD_NOTI_CHAR1 = "00009ef8";
     public static String BLE_NAME_PREFIX = "babaikaWC";
     
     static void registerClass(String write_ch, String read_ch, String uuid, Class<? extends BabaikaBLEDevice> cls) {
@@ -30,7 +33,8 @@ public class SampleGattAttributes {
     static {
         registerClass(BT_WEBCAM_CFG_CHAR,  BT_WEBCAM_NOTI_CHAR1, BabaikaWebCam.uuid, BabaikaWebCam.class);
         registerClass(BT_RADIO_CFG_CHAR,  BT_RADIO_NOTI_CHAR1, BabaikaRadio.uuid, BabaikaRadio.class);
-        registerClass(BT_RELAY_CFG_CHAR,  BT_RELAY_NOTI_CHAR1, BabaikaRelay.uuid, BabaikaRelay.class);    
+        registerClass(BT_RELAY_CFG_CHAR,  BT_RELAY_NOTI_CHAR1, BabaikaRelay.uuid, BabaikaRelay.class);
+        registerClass(BT_WIFI_RELOAD_CFG_CHAR,  BT_WIFI_RELOAD_NOTI_CHAR1, BabaikaWiFiReload.uuid, BabaikaWiFiReload.class);
     }
 
     public static boolean isMainService(String uuid) {
@@ -42,12 +46,12 @@ public class SampleGattAttributes {
 
     public static boolean isInputChar(String chid) {
         if (chid.length() < 8) return  false;
-        return  write_attributes.containsKey(chid.substring(0, 8));
+        return  write_attributes.containsKey(chid.substring(0, 8).toLowerCase(Locale.ROOT));
     }
 
     public static boolean isOutputChar(String chid) {
         if (chid.length() < 8) return  false;
-        return  read_attributes.containsKey(chid.substring(0, 8));
+        return  read_attributes.containsKey(chid.substring(0, 8).toLowerCase(Locale.ROOT));
     }
 
     public static boolean isIOChar(String chid) {
@@ -83,7 +87,7 @@ public class SampleGattAttributes {
 
     public static String getCharPicture(String chid) {
         if (chid.length() < 8) return  "";
-        String chid0 = chid.substring(0, 8);
+        String chid0 = chid.substring(0, 8).toLowerCase(Locale.ROOT);
         if (isIOChar(chid0)) {
             Class<? extends BabaikaBLEDevice> cl = write_attributes.get(chid0);
             if (cl == null) cl = read_attributes.get(chid0);
@@ -115,7 +119,7 @@ public class SampleGattAttributes {
 
     public static ArrayList<BabaikaCommand> getCommandSet(String chid) {
         if (chid.length() < 8) return  null;
-        String chid0 = chid.substring(0, 8);
+        String chid0 = chid.substring(0, 8).toLowerCase(Locale.ROOT);
         if (isInputChar(chid0)) {
             Class<? extends BabaikaBLEDevice> cl = write_attributes.get(chid0);
             if (cl != null) {
@@ -146,7 +150,7 @@ public class SampleGattAttributes {
 
     public static BabaikaItem getNotification(String chid) {
         if (chid.length() < 8) return  null;
-        String chid0 = chid.substring(0, 8);
+        String chid0 = chid.substring(0, 8).toLowerCase(Locale.ROOT);
         if (isOutputChar(chid0)) {
             Class<? extends BabaikaBLEDevice> cl = read_attributes.get(chid0);
             if (cl != null) {

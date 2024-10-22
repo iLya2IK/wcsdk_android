@@ -56,6 +56,7 @@ public class WCHTTPResync {
     private static final String ACTION =  "com.sggdev.wcsdk.alarm";
     public final static String CHANNEL_ID = TAG;
     public final static String EXTRA_NOTIFICATION_ID = "NOTIFICATION_ID";
+    public final static String EXTRA_NOTIFICATION_NEED_RESTART = "NOTIFICATION_NEED_RESTART";
     public final static int notificationId = 0x00ffda;
     public final static int notificationFailId = 0x00ffdb;
 
@@ -65,9 +66,13 @@ public class WCHTTPResync {
         createNotificationChannel(context);
     }
 
+    public static void refreshTimeStamp(Context context) {
+        mNotifySyncLock = resyncServiceLastStamp(context);
+    }
+
     public static void restartWCHTTPBackgroundWork(Context context) {
         init(context);
-        mNotifySyncLock = resyncServiceLastStamp(context);
+        refreshTimeStamp(context);
 
         launchWCHTTPBackgroundWork(context);
     }
@@ -260,6 +265,7 @@ public class WCHTTPResync {
 
                                     if (devices.size() > 0 && aMessageList.size() > 0) {
                                         sync.onNewMessages(myApp, aMessageList, devices);
+                                        refreshTimeStamp(myApp); // need to refresh the lst time stamp
                                         onmfired = true;
                                     }
                                 }

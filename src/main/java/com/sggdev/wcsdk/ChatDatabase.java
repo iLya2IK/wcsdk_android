@@ -267,7 +267,7 @@ public class ChatDatabase extends SQLiteOpenHelper {
                         DEVICE_ITEM_DB_ID, TABLE_DEVICES, DEVICE_ITEM_USER_NAME, DEVICE_ITEM_SERVER_NAME));
         stmt_get_last_timestamp = db.compileStatement(
                 String.format("with target1 as (values (''), (?)) "+
-                                "select max((%s||printf('%%d',%s))) from %s " +
+                                "select max((%s||printf('.%%04d', %s %% 10000))) from %s " +
                                 "inner join %s on %s.%s == %s.%s " +
                                 "where (%s in target1) and (%s == ?)",
                         KEY_MSG_LOCAL_TIMESTAMP, KEY_MSG_ID, TABLE_MSGS,
@@ -627,9 +627,10 @@ public class ChatDatabase extends SQLiteOpenHelper {
                     alist.add(server_time);
                 } else {
                     alist.add(time_stamp);
+                    if (time_stamp.compareTo(lst) > 0) {
+                        lst = time_stamp;
+                    }
                 }
-
-                lst = time_stamp;
 
                 db.execSQL(query_add_msgs, alist.toArray());
             }
@@ -973,8 +974,8 @@ public class ChatDatabase extends SQLiteOpenHelper {
         try {
             db.beginTransaction();
 
-            stmt_get_last_timestamp.bindString(1, aUserName);
-            stmt_get_last_timestamp.bindString(2, aDeviceName);
+            stmt_get_last_timestamp.bindString(1, aDeviceName);
+            stmt_get_last_timestamp.bindString(2, aUserName);
             lstStamp = stmt_get_last_timestamp.simpleQueryForString();
             if (lstStamp == null) lstStamp = "";
 
