@@ -7,7 +7,12 @@ public class BabaikaWiFiReload extends BabaikaBLEDevice {
     static String BT_WEBCAM_ICO = "ic_wifi_error_device";
 
     BabaikaWiFiReload() {
-        putCommNotification(new BabaikaCommonWiFiConfig(BT_WIFI_RELOAD_NOTI_CHAR1));
+        putCommNotification(new BabaikaCommonConfig(BT_WIFI_RELOAD_NOTI_CHAR1,
+                                BabaikaCommonConfig.genDefaultKeysWithFilter(
+                                        BabaikaCommonWiFiConfig.KEY_SSID,
+                                        BabaikaCommonWiFiConfig.KEY_SSID_PASS,
+                                        BabaikaCommonConfig.KEY_HOST
+                                )));
     }
 
     String getPictureName() {
